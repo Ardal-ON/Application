@@ -6,6 +6,7 @@ class HomePage(ft.UserControl):
         self._greeting = None
         self._card = None
         self._parameterlist = None
+        self._buttons = None
         super().__int__()
 
     def Greeting(self):
@@ -116,10 +117,35 @@ class HomePage(ft.UserControl):
             alignment=ft.alignment.center,
         )
 
+    def Buttons(self):
+        self._buttons = ft.Container(
+            ft.Row(
+                controls=[
+                    ft.ElevatedButton(
+                        text="Random Parameters",
+                        icon=ft.icons.CASINO,
+                        bgcolor=ft.colors.BLUE,
+                        color=ft.colors.WHITE,
+                        #on_click=Randomize Parameters,
+                    ),
+                    ft.ElevatedButton(
+                        text="Predictions",
+                        icon=ft.icons.CALCULATE,
+                        bgcolor=ft.colors.GREEN,
+                        color=ft.colors.WHITE,
+                        #on_click=Prediction,
+                    ),
+                ],
+            ),
+            alignment=ft.alignment.center,
+            width=360,
+        )
+
     def build(self):
         self.Greeting()
         self.Card()
         self.ParameterList()
+        self.Buttons()
         
         self._Homepage = ft.Container(
                         width=360,
@@ -127,7 +153,8 @@ class HomePage(ft.UserControl):
                         content=ft.Column(
                             [self._greeting,
                              self._card,
-                             self._parameterlist,]
+                             self._parameterlist,
+                             self._buttons,]
                         )
                         )
 
