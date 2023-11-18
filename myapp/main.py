@@ -300,8 +300,8 @@ class MainPage(ft.UserControl):
 
 def main(page: ft.Page):
     page.window_width = 380
-    page.window_height = 760
-    page.window_min_height = 760
+    page.window_height = 800
+    page.window_min_height = 800
     page.window_min_width = 380
     page.scroll = ft.ScrollMode.HIDDEN
     page.vertical_alignment = ft.MainAxisAlignment.START
