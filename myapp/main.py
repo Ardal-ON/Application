@@ -1,8 +1,11 @@
 import flet as ft
 
 from Home import HomePage
-from Dashboard import MainStackContainer
+from Dashboard import Dashboard
 from Maintenance import FletCalendar
+from Model import Model
+
+shared_model = Model()
 
 def main(page: ft.Page):
     page.window_width = 380
@@ -14,6 +17,16 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.padding = 0
     page.title = "My Application"
+
+
+    home = HomePage(data=shared_model)
+
+    dashboard = Dashboard()
+    dashboard.visible = False
+    
+    maintenance = FletCalendar()
+    maintenance.visible = False
+
 
     def changetab(navbar):
 	# GET INDEX TAB
@@ -38,14 +51,9 @@ def main(page: ft.Page):
                                                         label = "Maintenance"),
                             ]
         )
-
-    home = HomePage()
-
-    dashboard = MainStackContainer()
-    dashboard.visible = False
     
-    maintenance = FletCalendar()
-    maintenance.visible = False
+    
+    #print(model.get_parameter_dict())
     
     body = ft.Container(
         ft.Stack([
@@ -59,5 +67,5 @@ def main(page: ft.Page):
     page.update()
     
 
-ft.app(target=main, assets_dir="pic")
-#ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="pic")
+ft.app(target=main, assets_dir="assets")
+#ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="assets")

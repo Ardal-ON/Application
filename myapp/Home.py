@@ -1,12 +1,6 @@
 import flet as ft
-
 class HomePage(ft.UserControl):
     def __int__(self):
-        self._Homepage = None
-        self._greeting = None
-        self._card = None
-        self._parameterlist = None
-        self._buttons = None
         super().__int__()
 
     def Greeting(self):
@@ -54,7 +48,7 @@ class HomePage(ft.UserControl):
                     #margin=ft.margin.only(left=10)
                 ),
                 ft.Container(
-                    ft.Image(src='Car.png',fit=ft.ImageFit.FIT_HEIGHT),
+                    ft.Image(src='/pic/Car.png',fit=ft.ImageFit.FIT_HEIGHT),
                     width=360,
                     height=80,
                     alignment= ft.alignment.Alignment(0.95,0.75),
@@ -70,13 +64,11 @@ class HomePage(ft.UserControl):
         )
     
     def ParameterList(self):
-
-
         self._parameterlist = ft.Column(
             controls=[
                 ft.Container(
                     content= ft.Text(
-                                "Engine Healt Parameters",
+                                "Engine Health Parameters",
                                 text_align=ft.TextAlign.CENTER,
                                 weight="w600",
                                 size=20,),
@@ -85,32 +77,33 @@ class HomePage(ft.UserControl):
                 ),
                 ft.TextField(
                     label="Engine RPM",
-                    suffix_text="RPM",
+                    suffix_text="80...1450  RPM",
                     keyboard_type=ft.KeyboardType.NUMBER,
-                    prefix_icon=ft.icons.SPEED),
+                    prefix_icon=ft.icons.SPEED,
+                ),
                 ft.TextField(
                     label="Lub oil pressure",
-                    suffix_text="Pa",
+                    suffix_text="0.2...6.4  Pa",
                     keyboard_type=ft.KeyboardType.NUMBER,
                     prefix_icon=ft.icons.OIL_BARREL),
                 ft.TextField(
                     label="Fuel pressure",
-                    suffix_text="Pa",
+                    suffix_text="0.6...12.0  Pa",
                     keyboard_type=ft.KeyboardType.NUMBER,
                     prefix_icon=ft.icons.DISC_FULL),
                 ft.TextField(
                     label="Coolant pressure",
-                    suffix_text="Pa",
+                    suffix_text="0.0...4.8  Pa",
                     keyboard_type=ft.KeyboardType.NUMBER,
                     prefix_icon=ft.icons.WATER_DROP),
                 ft.TextField(
                     label="Lub oil temperature",
-                    suffix_text="°C",
+                    suffix_text="72.2...81.6  °C",
                     keyboard_type=ft.KeyboardType.NUMBER,
                     prefix_icon=ft.icons.HOT_TUB),
                 ft.TextField(
                     label="Coolant temperature",
-                    suffix_text="°C",
+                    suffix_text="61.6...95.9  °C",
                     keyboard_type=ft.KeyboardType.NUMBER,
                     prefix_icon=ft.icons.THERMOSTAT)
             ],
@@ -126,7 +119,7 @@ class HomePage(ft.UserControl):
                         icon=ft.icons.CASINO,
                         bgcolor=ft.colors.BLUE,
                         color=ft.colors.WHITE,
-                        #on_click=Randomize Parameters,
+                        on_click=self.randomize_parameters,
                     ),
                     ft.ElevatedButton(
                         text="Predictions",
@@ -141,12 +134,40 @@ class HomePage(ft.UserControl):
             width=360,
         )
 
+    def initialize_model(self):
+        self._model = self.data
+
+    def randomize_parameters(self,e):
+
+        self._model.random_initialization()
+
+        parameter_dict = self._model.get_parameter_dict()
+        
+        for parameter in parameter_dict:
+            if parameter == 'engine_rpm':
+                self._parameterlist.controls[1].value = str(parameter_dict[parameter])
+            if parameter == 'lub_oil_pressure':
+                self._parameterlist.controls[2].value = str(parameter_dict[parameter])
+            if parameter == 'fuel_pressure':
+                self._parameterlist.controls[3].value = str(parameter_dict[parameter])
+            if parameter == 'coolant_pressure':
+                self._parameterlist.controls[4].value = str(parameter_dict[parameter])
+            if parameter == 'lub_oil_temp':
+                self._parameterlist.controls[5].value = str(parameter_dict[parameter])
+            if parameter == 'coolant_temp':
+                self._parameterlist.controls[6].value = str(parameter_dict[parameter])
+        
+        for i in range(1,7):
+            self._parameterlist.controls[i].update()
+            
+
     def build(self):
+        self.initialize_model()
         self.Greeting()
         self.Card()
         self.ParameterList()
         self.Buttons()
-        
+
         self._Homepage = ft.Container(
                         width=360,
                         height=740,
