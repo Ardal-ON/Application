@@ -1,4 +1,5 @@
 import flet as ft
+import time
 class HomePage(ft.UserControl):
     def __int__(self):
         super().__int__()
@@ -122,11 +123,11 @@ class HomePage(ft.UserControl):
                         on_click=self.randomize_parameters,
                     ),
                     ft.ElevatedButton(
-                        text="Predictions",
+                        text="Prediction",
                         icon=ft.icons.CALCULATE,
                         bgcolor=ft.colors.GREEN,
                         color=ft.colors.WHITE,
-                        #on_click=Prediction,
+                        on_click=self.predict,
                     ),
                 ],
             ),
@@ -159,8 +160,37 @@ class HomePage(ft.UserControl):
         
         for i in range(1,7):
             self._parameterlist.controls[i].update()
-            
 
+        #print(self._model.get_parameter_dict())
+    
+    def predict(self,e):
+        
+        for parameter in self._model._parameter_dict:
+            if parameter == 'engine_rpm':
+                self._model.set_parameter_dict(parameter,float(self._parameterlist.controls[1].value)) 
+            if parameter == 'lub_oil_pressure':
+                self._model.set_parameter_dict(parameter,float(self._parameterlist.controls[2].value))
+            if parameter == 'fuel_pressure':
+                self._model.set_parameter_dict(parameter,float(self._parameterlist.controls[3].value))
+            if parameter == 'coolant_pressure':
+                self._model.set_parameter_dict(parameter,float(self._parameterlist.controls[4].value))
+            if parameter == 'lub_oil_temp':
+                self._model.set_parameter_dict(parameter,float(self._parameterlist.controls[5].value))
+            if parameter == 'coolant_temp':
+                self._model.set_parameter_dict(parameter,float(self._parameterlist.controls[6].value))
+        
+        self._model.predict()
+        
+        self._buttons.content.controls[1].text = "    Done    "
+        self._buttons.content.controls[1].update()
+
+        time.sleep(0.6)
+
+        self._buttons.content.controls[1].text = "Prediction"
+        self._buttons.content.controls[1].update()
+
+        #print(self._model.get_parameter_dict())
+    
     def build(self):
         self.initialize_model()
         self.Greeting()

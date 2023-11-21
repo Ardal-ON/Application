@@ -27,7 +27,7 @@ class Model:
         self._model = joblib.load('E:/USC/AME 505/project/Application/myapp/assets/models/gaussian_naive_bayes_model.joblib')
 
         self.random_initialization()
-        self.predict()
+        #self.predict()
 
     def random_initialization(self):
         for parameter in self._parameter_dict:
@@ -50,5 +50,8 @@ class Model:
     
     def get_parameter_dict(self):
         return self._parameter_dict
+    
+    def set_parameter_dict(self,parameter,value):
+        self._parameter_dict[parameter] = value
 
         
