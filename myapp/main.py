@@ -21,7 +21,7 @@ def main(page: ft.Page):
 
     home = HomePage(data=shared_model)
 
-    dashboard = Dashboard()
+    dashboard = Dashboard(data=shared_model)
     dashboard.visible = False
     
     maintenance = FletCalendar()
@@ -31,7 +31,11 @@ def main(page: ft.Page):
     def changetab(navbar):
 	# GET INDEX TAB
         my_index = navbar.control.selected_index
-        dashboard.visible = True if my_index == 0 else False
+        if my_index == 0 :
+            dashboard.set_dashboard_value()
+            dashboard.visible = True
+        else:
+            dashboard.visible = False
         home.visible = True if my_index == 1 else False
         maintenance.visible = True if my_index == 2 else False
         page.update()
@@ -67,5 +71,5 @@ def main(page: ft.Page):
     page.update()
     
 
-ft.app(target=main, assets_dir="assets")
-#ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="assets")
+#ft.app(target=main, assets_dir="assets")
+ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="assets")

@@ -49,7 +49,7 @@ class HomePage(ft.UserControl):
                     #margin=ft.margin.only(left=10)
                 ),
                 ft.Container(
-                    ft.Image(src='/pic/Car.png',fit=ft.ImageFit.FIT_HEIGHT),
+                    ft.Image(src='./pic/Car.png',fit=ft.ImageFit.FIT_HEIGHT),
                     width=360,
                     height=80,
                     alignment= ft.alignment.Alignment(0.95,0.75),
@@ -199,6 +199,7 @@ class HomePage(ft.UserControl):
         self.Buttons()
 
         self._Homepage = ft.Container(
+                        margin=ft.margin.only(top=20,left=10,right=10),
                         width=360,
                         height=740,
                         content=ft.Column(
