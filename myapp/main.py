@@ -2,15 +2,15 @@ import flet as ft
 
 from Home import HomePage
 from Dashboard import Dashboard
-from Maintenance import FletCalendar
+from Maintenance import Maintenance
 from Model import Model
 
 shared_model = Model()
 
 def main(page: ft.Page):
     page.window_width = 380
-    page.window_height = 800
-    page.window_min_height = 800
+    page.window_height = 840
+    page.window_min_height = 840
     page.window_min_width = 380
     page.scroll = ft.ScrollMode.HIDDEN
     page.vertical_alignment = ft.MainAxisAlignment.START
@@ -24,7 +24,7 @@ def main(page: ft.Page):
     dashboard = Dashboard(data=shared_model)
     dashboard.visible = False
     
-    maintenance = FletCalendar()
+    maintenance = Maintenance(data=shared_model)
     maintenance.visible = False
 
 
@@ -37,7 +37,11 @@ def main(page: ft.Page):
         else:
             dashboard.visible = False
         home.visible = True if my_index == 1 else False
-        maintenance.visible = True if my_index == 2 else False
+        if my_index == 2:
+            maintenance.set_suggestion_box()
+            maintenance.visible = True
+        else:
+            maintenance.visible = False
         page.update()
 		 
     page.navigation_bar = ft.NavigationBar(
@@ -71,5 +75,5 @@ def main(page: ft.Page):
     page.update()
     
 
-#ft.app(target=main, assets_dir="assets")
-ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="assets")
+ft.app(target=main, assets_dir="assets")
+#ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="assets")

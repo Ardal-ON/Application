@@ -2,6 +2,8 @@ import numpy as np
 import joblib
 from sklearn.naive_bayes import GaussianNB
 import statistics
+import datetime
+from dateutil import relativedelta
 class Model:
     def __init__(self):
         self._parameter_dict = {
@@ -44,6 +46,12 @@ class Model:
             'engine_condition' : [0.63,0.48]
         }
 
+        self._maintenance_req_part = []
+
+        self._repair_day = None
+        self._last_suggested_days = []
+        self._repair_day_accepted = False
+
         self._model = joblib.load('E:/USC/AME 505/project/Application/myapp/assets/models/gaussian_naive_bayes_model.joblib')
 
         self.random_initialization()
@@ -56,7 +64,7 @@ class Model:
             min = self._parameter_bounds_dict[parameter][0]
             max = self._parameter_bounds_dict[parameter][-1]
             self._parameter_dict[parameter] = \
-                np.round(np.random.uniform(min,max),decimals=6)
+                np.round(np.random.uniform(min,max),decimals=4)
 
     def predict(self):
         parameter_list = []
@@ -93,8 +101,41 @@ class Model:
                     self._Maintenance_dict[parameter] = 0.5
                 elif abs(zscore) > 2 :
                     self._Maintenance_dict[parameter] = 0
-                    
+        
+        print(self._Maintenance_dict)
+        self.maintenance_date_schedule()
+    
+    def maintenance_date_schedule(self):
 
+        if self._Maintenance_dict['engine_condition'] == 0:
+            if self._Maintenance_dict['engine_rpm'] <= 0.5:
+                self._maintenance_req_part.append('Engine Check')
+            if self._Maintenance_dict['lub_oil_pressure'] <= 0.5 or self._Maintenance_dict['lub_oil_temp'] <= 0.5:
+                self._maintenance_req_part.append('Oil Check')
+            if self._Maintenance_dict['fuel_pressure'] <= 0.5:
+                self._maintenance_req_part.append('Fuel Check')
+            if self._Maintenance_dict['coolant_pressure'] <= 0.5 or self._Maintenance_dict['coolant_temp'] <= 0.5:
+                self._maintenance_req_part.append('Coolant Check')
+            self.find_repair_date()
+        
+        self._maintenance_req_part = list(set(self._maintenance_req_part))
+        print(self._maintenance_req_part)
+    
+    def find_repair_date(self):
+
+        if len(self._maintenance_req_part) > 0 and self._repair_day_accepted == False:
+            today = datetime.datetime.today()
+            rel_day = relativedelta.relativedelta(days=np.random.randint(1,14))
+            while (today+rel_day).day in self._last_suggested_days:
+                rel_day = relativedelta.relativedelta(days=np.random.randint(1,14))
+            self._repair_day = today + rel_day
+            self._last_suggested_days.append(self._repair_day.day)
+        elif self._repair_day_accepted == True:
+            return
+        else:
+            self._repair_day = None
+
+        print(self._repair_day)            
     
     def get_parameter_dict(self):
         return self._parameter_dict
@@ -107,4 +148,16 @@ class Model:
     
     def get_Maintenance_dict(self):
         return self._Maintenance_dict
-        
+    
+    def get_maintenance_req_part(self):
+        return self._maintenance_req_part
+    
+    def get_repair_day(self):
+        return self._repair_day
+    
+    def set_repair_date(self):
+        self._repair_day_accepted = True
+    
+    def get_repair_date_status(self):
+        return self._repair_day_accepted
+    
