@@ -1,0 +1,15 @@
+{
+  "model_name": "Gaussian Naive Bayes",
+  "training_accuracy": 66.20805369127517,
+  "test_accuracy": 66.20805369127517,
+  "feature_columns": [
+    "Engine rpm",
+    "Lub oil pressure",
+    "Fuel pressure",
+    "Coolant pressure",
+    "lub oil temp",
+    "Coolant temp"
+  ],
+  "model_path": "models/best_model.pkl",
+  "scaler_path": "models/scaler.pkl"
+}
